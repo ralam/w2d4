@@ -1,7 +1,7 @@
 require "byebug"
 
 class Piece
-  attr_reader :pos, :color, :king
+  attr_reader :pos, :color, :king, :board
 
   def initialize(color, pos, board)
     @color = color
@@ -34,10 +34,10 @@ class Piece
     maybe_promote(self)
   end
 
-  def valid_slide?(start, finish)
-    move_diffs.include?([finish.first - start.first, finish.last - start.last]) &&
-      finish.all? { |el| el.between?(0,7) } &&
-      @board[finish].empty_piece?
+  def valid_slide?(start, finish_pos)
+    move_diffs.include?([finish_pos[0] - start[0], finish_pos[1] - start[1]]) &&
+      finish_pos.all? { |el| el.between?(0,7) } &&
+      @board[finish_pos].empty_piece?
   end
 
   def maybe_promote(piece)
@@ -91,10 +91,34 @@ class Piece
   end
 
   def perform_moves(list_of_moves)
+    temp_board = @board.dup
+    temp_piece = temp_board[@pos]
+    p temp_piece.object_id
+    p self.object_id
+    temp_piece.board.[]=([0, 1], Piece.new(:B, [0, 1], temp_piece.board))
+    temp_piece.board.render
+
+    if list_of_moves.length == 1
+      if valid_slide?(temp_piece.pos, list_of_moves[0])
+        p "passed validation"
+        temp_piece.perform_slide(list_of_moves[0])
+        temp_board.render
+      end
+    else
+      list_of_moves.each do |move|
+        if valid_jump?(temp_piece.pos, move)
+          temp_piece.perform_jump(move)
+          temp_board.render
+        else
+          false
+        end
+      end
+    end
+
   end
 
   def dup(empty_board)
-    Piece.new(@color, @pos, new_board)
+    Piece.new(@color, @pos, @board)
   end
 end
 
