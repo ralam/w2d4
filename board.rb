@@ -47,10 +47,10 @@ class Board
 end
 
 b = Board.new
-piece = Piece.new(:W, [4, 4], b)
-b[4, 4] = piece
+piece = Piece.new(:B, [0, 3], b)
+b[0, 3] = piece
 b.render
 #p piece.pos
-piece.perform_slide([3, 5])
+piece.perform_slide([1, 4])
 #p piece.pos
 b.render
