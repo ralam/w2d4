@@ -54,6 +54,7 @@ class Piece
       @board[start.first, start.last] = EmptyPiece.new()
       @board[middle.first, middle.last] = EmptyPiece.new()
       @board[finish.first, finish.last] = self
+      maybe_promote(self)
     end
   end
 
