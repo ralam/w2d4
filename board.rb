@@ -50,7 +50,7 @@ end
 
 b = Board.new
 piece = Piece.new(:B, [0, 3], b)
-oppo = Piece.new(:W, [1, 4], b)
+oppo = Piece.new(:B, [1, 4], b)
 b[0, 3] = piece
 b[1, 4] = oppo
 b.render

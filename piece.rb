@@ -46,24 +46,27 @@ class Piece
     end
   end
 
-
   def perform_jump(finish)
-    start = @pos
-    middle = find_jumped_cell(start, finish)
-    @pos = finish
-    @board[start.first, start.last] = EmptyPiece.new()
-    @board[middle.first, middle.last] = EmptyPiece.new()
-    @board[finish.first, finish.last] = self
+    if valid_jump?(@pos, finish)
+      start = @pos
+      middle = find_jumped_cell(start, finish)
+      @pos = finish
+      @board[start.first, start.last] = EmptyPiece.new()
+      @board[middle.first, middle.last] = EmptyPiece.new()
+      @board[finish.first, finish.last] = self
+    end
   end
 
   def find_jumped_cell(start, finish)
-    delta_x = (last.first - start.first) / 2
-    delta_y = (last.last - start.last) / 2
+    delta_x = (finish.first - start.first) / 2
+    delta_y = (finish.last - start.last) / 2
     jumped_cell = [start.first + delta_x, start.last + delta_y]
   end
 
   def valid_jump?(start, finish)
-    true
+    finish.all? { |el| el.between?(0,7) } &&
+    enemy?(@board[find_jumped_cell(start, finish).first, find_jumped_cell(start, finish).last]) &&
+    @board[finish.first, finish.last].empty_piece?
   end
 
   def empty_piece?
@@ -80,9 +83,6 @@ class Piece
     else
       @color == :B ? " \u25CF ".encode('utf-8').colorize(:color => :black) : " \u25CF ".encode('utf-8').colorize(:color => :white)
     end
-  end
-
-  def perform_jump
   end
 
   def perform_moves(list_of_moves)
