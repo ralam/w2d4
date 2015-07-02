@@ -33,5 +33,6 @@ class Board
 end
 
 b = Board.new
-b[0, 0] = Piece.new(:R, [0,0])
+b[0, 0] = Piece.new(:W, [0, 0])
+b[0, 1] = Piece.new(:B, [0, 1])
 b.render

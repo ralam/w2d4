@@ -15,7 +15,7 @@ class Piece
     if @king
       directions = [[-1, -1], [-1, 1],[1, -1], [1, 1]]
     else
-      @color == :R ? directions = [[-1, -1], [-1, 1]] : directions = [[1, -1], [1, 1]]
+      @color == :W ? directions = [[-1, -1], [-1, 1]] : directions = [[1, -1], [1, 1]]
     end
 
     directions
@@ -29,7 +29,7 @@ class Piece
   end
 
   def render
-    " \u25CB ".encode('utf-8')
+    @color == :B ? " \u25CB ".encode('utf-8') :  " \u25CF ".encode('utf-8')
   end
 
   def valid_slide?
