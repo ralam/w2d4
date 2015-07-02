@@ -39,10 +39,6 @@ class Piece
     @color == :B ? " \u25CF ".encode('utf-8').colorize(:color => :black) : " \u25CF ".encode('utf-8').colorize(:color => :white)
   end
 
-  def valid_slide?
-    true
-  end
-
   def perform_jump
   end
 

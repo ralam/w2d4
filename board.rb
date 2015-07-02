@@ -45,15 +45,21 @@ class Board
   end
 
   def move(from, to)
-    @grid[from.first][from.last].perform_slide(to)
-    @grid[to.first][to.last], @grid[from.first][from.last] = @grid[from.first][from.last], @grid[to.first][to.last]
+    if valid?(to)
+      @grid[from.first][from.last].perform_slide(to)
+      @grid[to.first][to.last], @grid[from.first][from.last] = @grid[from.first][from.last], @grid[to.first][to.last]
+    end
+  end
+
+  def valid?(pos)
+    pos.all? { |coord| coord.between?(0, 7)}
   end
 end
 
-pawn = Piece.new(:W, [3,4])
+pawn = Piece.new(:W, [2,3])
 b = Board.new
-b[3, 4] = pawn
+b[2, 3] = pawn
 b.render
-b.move([3, 4], [2, 5])
+b.move([2, 3], [1, 4])
 p pawn.pos
 b.render
