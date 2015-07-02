@@ -1,4 +1,5 @@
 require "byebug"
+# require_relative"board"
 
 class Piece
   attr_reader :pos
@@ -6,7 +7,7 @@ class Piece
   def initialize(color, pos)
     @color = color
     @pos = pos
-#    @board = board
+    # @board = board
     @king = false
   end
 
@@ -30,8 +31,8 @@ class Piece
     col = start.last
     finish_pos.last - col < 0 ? dir = move_diffs.first : dir = move_diffs.last
 
-    pos = [[row + dir.first], [col + dir.last]]
-
+    pos = [row + dir.first, col + dir.last]
+    @pos = pos
   end
 
   def render
@@ -48,6 +49,9 @@ class Piece
   def perform_moves(list_of_moves)
   end
 
+  def dup(empty_board)
+    Piece.new(@color, @pos, new_board)
+  end
 end
 
 class EmptyPiece < Piece
@@ -58,8 +62,12 @@ class EmptyPiece < Piece
   def render
     "   "
   end
-end
 
-piece = Piece.new(:W, [4, 4])
-piece.perform_slide([3, 5])
-p piece.pos
+  def dup
+    EmptyPiece.new()
+  end
+end
+#
+# piece = Piece.new(:W, [4, 4])
+# piece.perform_slide([3, 5])
+# p piece.pos
