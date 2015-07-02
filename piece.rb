@@ -27,13 +27,11 @@ class Piece
   end
 
   def perform_slide(finish)
-    if valid_slide?(@pos, finish)
-      start = @pos
-      @pos = finish
-      @board[start] = EmptyPiece.new()
-      @board[finish] = self
-      maybe_promote(self)
-    end
+    start = @pos
+    @pos = finish
+    @board[start] = EmptyPiece.new()
+    @board[finish] = self
+    maybe_promote(self)
   end
 
   def valid_slide?(start, finish)
@@ -49,15 +47,13 @@ class Piece
   end
 
   def perform_jump(finish)
-    if valid_jump?(@pos, finish)
-      start = @pos
-      middle = find_jumped_cell(start, finish)
-      @pos = finish
-      @board[start] = EmptyPiece.new()
-      @board[middle] = EmptyPiece.new()
-      @board[finish] = self
-      maybe_promote(self)
-    end
+    start = @pos
+    middle = find_jumped_cell(start, finish)
+    @pos = finish
+    @board[start] = EmptyPiece.new()
+    @board[middle] = EmptyPiece.new()
+    @board[finish] = self
+    maybe_promote(self)
   end
 
   def find_jumped_cell(start, finish)
