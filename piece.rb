@@ -2,7 +2,7 @@ require "byebug"
 # require_relative 'board'
 
 class Piece
-  attr_reader :pos, :perform_slide
+  attr_reader :pos, :perform_slide, :color
 
   def initialize(color, pos, board)
     @color = color
@@ -35,7 +35,17 @@ class Piece
   end
 
   def valid_slide?(start, finish)
-    move_diffs.include?([finish.first - start.first, finish.last - start.last]) && finish.all? { |el| el.between?(0,7) }
+    move_diffs.include?([finish.first - start.first, finish.last - start.last])
+    finish.all? { |el| el.between?(0,7) }
+    @board[finish.first, finish.last].empty_piece? || enemy?(@board[finish.first, finish.last])
+  end
+
+  def empty_piece?
+    false
+  end
+
+  def enemy?(piece)
+    @color != piece.color
   end
 
   def render
@@ -60,6 +70,10 @@ class EmptyPiece < Piece
 
   def render
     "   "
+  end
+
+  def empty_piece?
+    true
   end
 
   def dup

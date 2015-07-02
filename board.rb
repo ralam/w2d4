@@ -48,9 +48,13 @@ end
 
 b = Board.new
 piece = Piece.new(:B, [0, 3], b)
+oppo = Piece.new(:W, [1, 4], b)
+ally = Piece.new(:B, [1, 2], b)
 b[0, 3] = piece
+b[1, 4] = oppo
+b[1, 2] = ally
 b.render
 #p piece.pos
-piece.perform_slide([1, 4])
+piece.perform_slide([1, 2])
 #p piece.pos
 b.render
