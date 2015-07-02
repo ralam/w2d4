@@ -1,6 +1,8 @@
+require_relative "board"
+
 class Piece
 
-  def inititalize(color, pos, board)
+  def initialize(color, pos)
     @color = color
     @pos = pos
     @board = board
@@ -12,16 +14,17 @@ class Piece
   end
 
   def move_diffs
-    directions = []
     if @king
-      directions += [[-1, -1], [-1, 1],[1, -1], [1, 1]]
+      directions = [[-1, -1], [-1, 1],[1, -1], [1, 1]]
     else
-      @color == :R ? directions += [[-1, -1], [-1, 1]] : directions += [[1, -1], [1, 1]]
+      @color == :R ? directions = [[-1, -1], [-1, 1]] : directions = [[1, -1], [1, 1]]
     end
 
+    directions
   end
 
   def perform_slide
+    
   end
 
   def perform_jump
@@ -29,8 +32,6 @@ class Piece
 
   def moves
     valid_moves = []
-    @dir.each do |dir|
-
   end
 
   def perform_moves(list_of_moves)

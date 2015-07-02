@@ -10,4 +10,7 @@ class Board
   def render
   end
 
+  def valid_move?
+  end
+
 end
