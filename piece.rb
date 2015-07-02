@@ -1,13 +1,13 @@
 require "byebug"
-# require_relative"board"
+# require_relative 'board'
 
 class Piece
-  attr_reader :pos
+  attr_reader :pos, :perform_slide
 
-  def initialize(color, pos)
+  def initialize(color, pos, board)
     @color = color
     @pos = pos
-    # @board = board
+    @board = board
     @king = false
   end
 
@@ -27,12 +27,12 @@ class Piece
 
   def perform_slide(finish_pos)
     start = @pos
-    row = start.first
-    col = start.last
-    finish_pos.last - col < 0 ? dir = move_diffs.first : dir = move_diffs.last
-
-    pos = [row + dir.first, col + dir.last]
-    @pos = pos
+    @pos = finish_pos
+    p start
+    p finish_pos
+    p @pos
+    @board[start.first, start.last] = EmptyPiece.new()
+    @board[finish_pos.first, finish_pos.last] = self
   end
 
   def render
@@ -63,7 +63,3 @@ class EmptyPiece < Piece
     EmptyPiece.new()
   end
 end
-#
-# piece = Piece.new(:W, [4, 4])
-# piece.perform_slide([3, 5])
-# p piece.pos

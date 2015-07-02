@@ -3,6 +3,7 @@ require_relative "piece"
 require "byebug"
 
 class Board
+  attr_accessor :grid
 
   def initialize
     @grid = Array.new(8) { Array.new(8) { EmptyPiece.new } }
@@ -43,23 +44,13 @@ class Board
 
     empty_board
   end
-
-  def move(from, to)
-    if valid?(to)
-      @grid[from.first][from.last].perform_slide(to)
-      @grid[to.first][to.last], @grid[from.first][from.last] = @grid[from.first][from.last], @grid[to.first][to.last]
-    end
-  end
-
-  def valid?(pos)
-    pos.all? { |coord| coord.between?(0, 7)}
-  end
 end
 
-pawn = Piece.new(:W, [2,3])
 b = Board.new
-b[2, 3] = pawn
+piece = Piece.new(:W, [4, 4], b)
+b[4, 4] = piece
 b.render
-b.move([2, 3], [1, 4])
-p pawn.pos
+#p piece.pos
+piece.perform_slide([3, 5])
+#p piece.pos
 b.render
