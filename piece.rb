@@ -28,6 +28,10 @@ class Piece
     @pos = [[row + dir.first], [col + dir.last]]
   end
 
+  def render
+    " U25CB ".encode('utf-8')
+  end
+
   def valid_slide?
     true
   end
@@ -45,7 +49,8 @@ class EmptyPiece < Piece
   def initialize
   end
 
-end
+  def render
+    "   "
+  end
 
-empty = EmptyPiece.new
-p empty
+end
