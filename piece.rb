@@ -17,8 +17,10 @@ class Piece
   def move_diffs
     if @king
       directions = [[-1, -1], [-1, 1],[1, -1], [1, 1]]
+    elsif @color == :W
+      directions = [[-1, -1], [-1, 1]]
     else
-      @color == :W ? directions = [[-1, -1], [-1, 1]] : directions = [[1, -1], [1, 1]]
+      directions = [[1, -1], [1, 1]]
     end
 
     directions
@@ -28,16 +30,16 @@ class Piece
     if valid_slide?(@pos, finish)
       start = @pos
       @pos = finish
-      @board[start.first, start.last] = EmptyPiece.new()
-      @board[finish.first, finish.last] = self
+      @board[start] = EmptyPiece.new()
+      @board[finish] = self
       maybe_promote(self)
     end
   end
 
   def valid_slide?(start, finish)
     move_diffs.include?([finish.first - start.first, finish.last - start.last]) &&
-    finish.all? { |el| el.between?(0,7) } &&
-    @board[finish.first, finish.last].empty_piece?
+      finish.all? { |el| el.between?(0,7) } &&
+      @board[finish].empty_piece?
   end
 
   def maybe_promote(piece)
@@ -51,9 +53,9 @@ class Piece
       start = @pos
       middle = find_jumped_cell(start, finish)
       @pos = finish
-      @board[start.first, start.last] = EmptyPiece.new()
-      @board[middle.first, middle.last] = EmptyPiece.new()
-      @board[finish.first, finish.last] = self
+      @board[start] = EmptyPiece.new()
+      @board[middle] = EmptyPiece.new()
+      @board[finish] = self
       maybe_promote(self)
     end
   end
@@ -66,8 +68,8 @@ class Piece
 
   def valid_jump?(start, finish)
     finish.all? { |el| el.between?(0,7) } &&
-    enemy?(@board[find_jumped_cell(start, finish).first, find_jumped_cell(start, finish).last]) &&
-    @board[finish.first, finish.last].empty_piece?
+      enemy?(@board[find_jumped_cell(start, finish)]) &&
+      @board[finish].empty_piece?
   end
 
   def empty_piece?
@@ -80,9 +82,15 @@ class Piece
 
   def render
     if @king
-      @color == :B ? " \u25CB ".encode('utf-8').colorize(:color => :black) : " \u25CB ".encode('utf-8').colorize(:color => :white)
+      if @color == :B
+        " \u25CB ".encode('utf-8').colorize(:color => :black)
+      else
+        " \u25CB ".encode('utf-8').colorize(:color => :white)
+      end
+    elsif @color == :B
+      " \u25CF ".encode('utf-8').colorize(:color => :black)
     else
-      @color == :B ? " \u25CF ".encode('utf-8').colorize(:color => :black) : " \u25CF ".encode('utf-8').colorize(:color => :white)
+      " \u25CF ".encode('utf-8').colorize(:color => :white)
     end
   end
 

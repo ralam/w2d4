@@ -22,11 +22,13 @@ class Board
 
 
 
-  def [](row, col)
+  def [](pos)
+    row, col = pos
     @grid[row][col]
   end
 
-  def []=(row,col, mark)
+  def []=(pos, mark)
+    row, col = pos
     @grid[row][col] = mark
   end
 
@@ -50,11 +52,16 @@ end
 
 b = Board.new
 piece = Piece.new(:B, [0, 3], b)
-oppo = Piece.new(:B, [1, 4], b)
-b[0, 3] = piece
-b[1, 4] = oppo
+oppo = Piece.new(:W, [1, 4], b)
+oppo2 = Piece.new(:W, [3, 4], b)
+b.[]=([0, 3], piece)
+b.[]=([1, 4], oppo)
+b.[]=([3, 4], oppo2)
 b.render
 p piece.pos
 piece.perform_jump([2, 5])
+p piece.pos
+b.render
+piece.perform_jump([4, 3])
 p piece.pos
 b.render
