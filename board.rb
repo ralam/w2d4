@@ -14,3 +14,6 @@ class Board
   end
 
 end
+
+b = Board.new
+p b

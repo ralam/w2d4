@@ -1,5 +1,3 @@
-require_relative "board"
-
 class Piece
 
   def initialize(color, pos)
@@ -23,15 +21,18 @@ class Piece
     directions
   end
 
-  def perform_slide
-    
+  def perform_slide(finish_pos)
+    row = @pos.first
+    col = @pos.last
+    col - finish_pos.first == -1 ? dir = move_diffs.first : dir = move_diffs.last
+    @pos = [[row + dir.first], [col + dir.last]]
+  end
+
+  def valid_slide?
+    true
   end
 
   def perform_jump
-  end
-
-  def moves
-    valid_moves = []
   end
 
   def perform_moves(list_of_moves)
@@ -44,10 +45,7 @@ class EmptyPiece < Piece
   def initialize
   end
 
-  def perform_moves
-  end
-
-  def perform_jump
-  end
-
 end
+
+empty = EmptyPiece.new
+p empty
