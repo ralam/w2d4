@@ -11,7 +11,7 @@ class Board
   def render
     @grid.each_with_index do |row, r_idx|
       row.each_with_index do |cell, c_idx|
-        color = (r_idx + c_idx) % 2 == 0? :red : :black
+        color = (r_idx + c_idx) % 2 == 0? :light_green : :light_blue
         print cell.render.colorize(:background => color)
       end
       puts
@@ -33,6 +33,6 @@ class Board
 end
 
 b = Board.new
-b[0, 0] = Piece.new(:W, [0, 0])
-b[0, 1] = Piece.new(:B, [0, 1])
+b[3, 4] = Piece.new(:W, [3, 4])
+b[3, 4].perform_slide([2, 5])
 b.render

@@ -1,4 +1,7 @@
+require "byebug"
+
 class Piece
+  attr_reader :pos
 
   def initialize(color, pos)
     @color = color
@@ -22,14 +25,17 @@ class Piece
   end
 
   def perform_slide(finish_pos)
-    row = @pos.first
-    col = @pos.last
-    col - finish_pos.first == -1 ? dir = move_diffs.first : dir = move_diffs.last
-    @pos = [[row + dir.first], [col + dir.last]]
+    start = @pos
+    row = start.first
+    col = start.last
+    finish_pos.last - col < 0 ? dir = move_diffs.first : dir = move_diffs.last
+
+    pos = [[row + dir.first], [col + dir.last]]
+
   end
 
   def render
-    @color == :B ? " \u25CB ".encode('utf-8') :  " \u25CF ".encode('utf-8')
+    @color == :B ? " \u25CF ".encode('utf-8').colorize(:color => :black) : " \u25CF ".encode('utf-8').colorize(:color => :white)
   end
 
   def valid_slide?
@@ -52,5 +58,8 @@ class EmptyPiece < Piece
   def render
     "   "
   end
-
 end
+
+piece = Piece.new(:W, [4, 4])
+piece.perform_slide([3, 5])
+p piece.pos
