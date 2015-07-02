@@ -19,6 +19,14 @@ class Board
     puts
   end
 
+  def [](row, col)
+    @grid[row][col]
+  end
+
+  def []=(row,col, mark)
+    @grid[row][col] = mark
+  end
+
   def valid_move?
   end
 
