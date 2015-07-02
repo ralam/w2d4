@@ -3,7 +3,7 @@ class Piece
   def initialize(color, pos)
     @color = color
     @pos = pos
-    @board = board
+#    @board = board
     @king = false
   end
 
@@ -29,7 +29,7 @@ class Piece
   end
 
   def render
-    " U25CB ".encode('utf-8')
+    " \u25CB ".encode('utf-8')
   end
 
   def valid_slide?
