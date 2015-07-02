@@ -5,7 +5,7 @@ class Piece
     @pos = pos
     @board = board
     @king = false
-    @dir = @color == :R ? [[-1, -1], [-1, 1]] : [[1, -1], [1, 1]]
+    @dir = [-1, 1]
   end
 
   def make_king
@@ -17,6 +17,7 @@ class Piece
   end
 
   def perform_jump
+    @pos =
   end
 
   def moves
