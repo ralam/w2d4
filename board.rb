@@ -58,13 +58,5 @@ b.[]=([0, 3], piece)
 b.[]=([1, 4], oppo)
 b.[]=([3, 4], oppo2)
 b.render
-p piece.perform_moves([[3, 5], [5, 3]])
+p piece.valid_move_seq?([[1, 5]])
 b.render
-# b.render
-# p piece.pos
-# piece.perform_jump([2, 5])
-# p piece.pos
-# b.render
-# piece.perform_jump([4, 3])
-# p piece.pos
-# b.render

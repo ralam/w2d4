@@ -27,11 +27,16 @@ class Piece
   end
 
   def perform_slide(finish)
+    unless valid_slide?(@pos, finish)
+      return false
+    end
     start = @pos
     @pos = finish
     @board[start] = EmptyPiece.new()
     @board[finish] = self
     maybe_promote(self)
+
+    true
   end
 
   def valid_slide?(start, finish_pos)
@@ -47,6 +52,9 @@ class Piece
   end
 
   def perform_jump(finish)
+    unless valid_jump?(@pos, finish)
+      return false
+    end
     start = @pos
     middle = find_jumped_cell(start, finish)
     @pos = finish
@@ -62,10 +70,10 @@ class Piece
     jumped_cell = [start.first + delta_x, start.last + delta_y]
   end
 
-  def valid_jump?(start, finish)
-    finish.all? { |el| el.between?(0,7) } &&
-      enemy?(@board[find_jumped_cell(start, finish)]) &&
-      @board[finish].empty_piece?
+  def valid_jump?(start, finish_pos)
+    finish_pos.all? { |el| el.between?(0,7) } &&
+      enemy?(@board[find_jumped_cell(start, finish_pos)]) &&
+      @board[finish_pos].empty_piece?
   end
 
   def empty_piece?
@@ -90,28 +98,22 @@ class Piece
     end
   end
 
-  def perform_moves(list_of_moves)
+  def valid_move_seq?(list_of_moves)
     temp_board = @board.dup
     temp_piece = temp_board[@pos]
     temp_piece.board.render
+    first_move = list_of_moves[0]
 
-    if list_of_moves.length == 1
-      if valid_slide?(temp_piece.pos, list_of_moves[0])
-        temp_piece.perform_slide(list_of_moves[0])
+    if temp_piece.perform_slide(first_move)
+      temp_piece.perform_slide(first_move)
+      temp_board.render
+    elsif valid_jump?(temp_piece.pos, first_move)
+      list_of_moves.each do |move|
+        temp_piece.perform_jump(move)
         temp_board.render
-        @board = temp_board
-      else
-        false
       end
     else
-      list_of_moves.each do |move|
-        if valid_jump?(temp_piece.pos, move)
-          temp_piece.perform_jump(move)
-          temp_board.render
-        else
-          false
-        end
-      end
+      return false
     end
 
   end
