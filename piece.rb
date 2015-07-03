@@ -26,14 +26,14 @@ class Piece
     directions
   end
 
-  def perform_slide(finish)
-    unless valid_slide?(@pos, finish)
+  def perform_slide(finish_pos)
+    unless valid_slide?(@pos, finish_pos)
       return false
     end
     start = @pos
-    @pos = finish
+    @pos = finish_pos
     @board[start] = EmptyPiece.new()
-    @board[finish] = self
+    @board[finish_pos] = self
     maybe_promote(self)
 
     true
@@ -51,17 +51,19 @@ class Piece
     end
   end
 
-  def perform_jump(finish)
-    unless valid_jump?(@pos, finish)
+  def perform_jump(finish_pos)
+    unless valid_jump?(@pos, finish_pos)
       return false
     end
     start = @pos
-    middle = find_jumped_cell(start, finish)
-    @pos = finish
+    middle = find_jumped_cell(start, finish_pos)
+    @pos = finish_pos
     @board[start] = EmptyPiece.new()
     @board[middle] = EmptyPiece.new()
-    @board[finish] = self
+    @board[finish_pos] = self
     maybe_promote(self)
+
+    true
   end
 
   def find_jumped_cell(start, finish)
@@ -73,7 +75,9 @@ class Piece
   def valid_jump?(start, finish_pos)
     finish_pos.all? { |el| el.between?(0,7) } &&
       enemy?(@board[find_jumped_cell(start, finish_pos)]) &&
-      @board[finish_pos].empty_piece?
+      @board[finish_pos].empty_piece? &&
+      (start.first - finish_pos.first).abs == 2 &&
+      (start.last - finish_pos.last).abs == 2
   end
 
   def empty_piece?
@@ -107,20 +111,35 @@ class Piece
     if temp_piece.perform_slide(first_move)
       temp_piece.perform_slide(first_move)
       temp_board.render
-    elsif valid_jump?(temp_piece.pos, first_move)
+    elsif temp_piece.perform_jump(first_move)
       list_of_moves.each do |move|
-        temp_piece.perform_jump(move)
-        temp_board.render
+        if temp_piece.perform_jump(first_move)
+          temp_piece.perform_jump(move)
+          temp_board.render
+        else
+          return false
+        end
       end
     else
       return false
     end
-
   end
 
   def dup(empty_board)
     Piece.new(@color, @pos, empty_board)
   end
+
+  def perform_moves(list_of_moves)
+    if valid_move_seq?(list_of_moves)
+      perform_moves!(list_of_moves)
+    else
+      raise InvalidMoveError.new "Invalid move!"
+    end
+  end
+
+  def perform_moves!(list_of_moves)
+  end
+  
 end
 
 class EmptyPiece < Piece
@@ -143,4 +162,7 @@ class EmptyPiece < Piece
   def dup
     EmptyPiece.new()
   end
+end
+
+class InvalidMoveError < StandardError
 end

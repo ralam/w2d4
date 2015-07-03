@@ -58,5 +58,5 @@ b.[]=([0, 3], piece)
 b.[]=([1, 4], oppo)
 b.[]=([3, 4], oppo2)
 b.render
-p piece.valid_move_seq?([[1, 5]])
+p piece.valid_move_seq?([[2, 5], [3, 4]])
 b.render
