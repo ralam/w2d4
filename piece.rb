@@ -93,16 +93,15 @@ class Piece
   def perform_moves(list_of_moves)
     temp_board = @board.dup
     temp_piece = temp_board[@pos]
-    p temp_piece.object_id
-    p self.object_id
-    temp_piece.board.[]=([0, 1], Piece.new(:B, [0, 1], temp_piece.board))
     temp_piece.board.render
 
     if list_of_moves.length == 1
       if valid_slide?(temp_piece.pos, list_of_moves[0])
-        p "passed validation"
         temp_piece.perform_slide(list_of_moves[0])
         temp_board.render
+        @board = temp_board
+      else
+        false
       end
     else
       list_of_moves.each do |move|
@@ -118,7 +117,7 @@ class Piece
   end
 
   def dup(empty_board)
-    Piece.new(@color, @pos, @board)
+    Piece.new(@color, @pos, empty_board)
   end
 end
 
@@ -133,6 +132,10 @@ class EmptyPiece < Piece
 
   def empty_piece?
     true
+  end
+
+  def enemy?(piece)
+    false
   end
 
   def dup
