@@ -36,7 +36,7 @@ class Piece
     @board[finish_pos] = self
     maybe_promote(self)
 
-    true
+    return true
   end
 
   def valid_slide?(start, finish_pos)
@@ -63,7 +63,7 @@ class Piece
     @board[finish_pos] = self
     maybe_promote(self)
 
-    true
+    return true
   end
 
   def find_jumped_cell(start, finish)
@@ -105,8 +105,24 @@ class Piece
   def valid_move_seq?(list_of_moves)
     temp_board = @board.dup
     temp_piece = temp_board[@pos]
+    temp_piece.board.render
+    first_move = list_of_moves[0]
 
-    temp_piece.perform_moves!(list_of_moves)
+    if temp_piece.perform_slide(first_move)
+      temp_piece.perform_slide(first_move)
+      return true
+    elsif temp_piece.perform_jump(first_move)
+      list_of_moves.each do |move|
+        if temp_piece.perform_jump(first_move)
+          temp_piece.perform_jump(move)
+          true
+        else
+          return false
+        end
+      end
+    else
+      return false
+    end
   end
 
   def dup(empty_board)
@@ -120,27 +136,6 @@ class Piece
       raise InvalidMoveError.new "Invalid move!"
     end
   end
-
-  def perform_moves!(list_of_moves)
-    first_move = list_of_moves[0]
-
-    if self.perform_slide(first_move)
-      self.perform_slide(first_move)
-      temp_board.render
-    elsif self.perform_jump(first_move)
-      list_of_moves.each do |move|
-        if self.perform_jump(first_move)
-          self.perform_jump(move)
-          temp_board.render
-        else
-          return false
-        end
-      end
-    else
-      return false
-    end
-  end
-
 end
 
 class EmptyPiece < Piece
